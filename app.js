@@ -37,6 +37,7 @@ server.listen(port);
 
 // Put a friendly message on the terminal
 console.log('Server running at http://127.0.0.1:' + port + '/'); */
+
 const express = require('express');
 const app = express();
 const port = 3500;
@@ -44,41 +45,40 @@ const path = require('path');
 const axios = require('axios');
 const cors = require('cors');
 const apiToken = "c87gv3qad3i9lknto67g";
+function send(res, url, reqType){
+  axios.get(url)
+    .then(finHubData => {
+      console.log(`recieved finhub ${reqType} at ` + new Date().toLocaleTimeString());
+      console.log('recieved finhub data:');
+      package = new Object();
+      package[reqType] = finHubData.data;
+      res.send(package);
 
+    }).catch(err =>{
+      console.log('error encoutered while recieving finhub profile ', err.message);
+    });
+}
 app.use(cors());
 
 var http = require('http'),
   fs = require('fs');
 
 
-app.get('/search/:id', (req, res) => {
-  console.log('recieved request at' + new Date().toLocaleTimeString());
-  const id = req.params.id;
-  const url = `https://finnhub.io/api/v1/stock/profile2?symbol=${id}&token=${apiToken}`;
-  console.log('url is: ' + url);
-  axios.get(url)
-    .then(finHubData => {
-      console.log('recieved finhub profile at' + new Date().toLocaleTimeString());
-      console.log('recieved finhub data:');
-      console.log(finHubData)
-      res.send({'profileData' : finHubData.data});
-
-    }).catch(err =>{
-      console.log('error encoutered while recieving finhub profile ', err.message);
-    });
+app.get('/profile/:id', (req, res) => {
+  const profileUrl = `https://finnhub.io/api/v1/stock/profile2?symbol=${req.params.id}&token=${apiToken}`;
+  send(res, profileUrl, 'profile');
+  /*const priceUrl = `https://finnhub.io/api/v1/quote?symbol=${id}&token=${apiToken}`;
+  send(res, priceUrl, 'priceData');*/
 });
 
-app.get('/', (req, res) => {
-  console.log('recieved request at' + new Date().toLocaleTimeString());
-  const id = 'tsla';
-  axios.get(`https://finnhub.io/api/v1/stock/profile2?symbol=${id}&token=${apiToken}`)
-    .then(res => {
-      console.log('recieved finhub profile at' + new Date().toLocaleTimeString());
-      res.send(data);
+app.get('/price/:id', (req, res) => {
+  const priceUrl = `https://finnhub.io/api/v1/quote?symbol=${req.params.id}&token=${apiToken}`;
+  send(res, priceUrl, 'price');
+});
 
-    }).catch(err =>{
-      console.log('error encoutered while recieving finhub profile ', err.message);
-    });
+app.get('/symbols/:id', (req, res) => {
+  const priceUrl = `https://finnhub.io/api/v1/search?q=${req.params.id}&token=${apiToken}`;
+  send(res, priceUrl, 'symbols');
 });
 
 app.listen(port, () => {
