@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html ng-app>
+  <head>
+    <title>Elastic Beanstalk</title>
+    <link type="text/css" rel='stylesheet' href="/css/main.css">
+    <script src="/angular.js"></script>
+    <link type='text/css' rel='stylesheet' href="/bootstrap/bootstrap.css" />
+    <link rel="shortcut icon" href="#">
+  </head>
+  <body>
+    <div id="root-container">
+      <div id="navbar" class="navbar navbar-expand-md w-100 justify-content-between">
+        <div class="navbar-brand-lg mr-auto" id="navbar-welcome">
+           Welcome to the project
+        </div>
+        <ul class="navbar-nav mr-auto float-right">
+          <li class="nav-item active">
+            <a class="nav-link" href="#"> search </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="#"> watchlist </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="#"> portfolio </a>
+          </li>
+        </ul>
+      </div>
+      <div class="p-5 jumbotron text-center">
+        <h1> Stock Search</h1>
+        <div class="search-bar input-group">
+          <form name="search-form" id="search-form">
+
+            <img src="\static\assets\search2.png" onclick="onTickerSearch()" class="search-button">
+            <input class="search-bar-input" type="text" placeholder="Enter Stock Ticker Symbol" name="ticker-search"
+                   maxlength="12" onkeypress="onKeyUp(event)" required/>
+            <img src="\static\assets\x_close.png" onclick="onClearInput()" class="clear-button">
+          </form onsubmit="event.preventDefault();return false;">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
