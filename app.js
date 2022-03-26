@@ -46,16 +46,19 @@ const axios = require('axios');
 const cors = require('cors');
 const apiToken = "c87gv3qad3i9lknto67g";
 function send(res, url, reqType){
+  console.log('requesting finhub data at url: ' + url);
   axios.get(url)
     .then(finHubData => {
       console.log(`recieved finhub ${reqType} at ` + new Date().toLocaleTimeString());
-      console.log('recieved finhub data:');
       package = new Object();
       package[reqType] = finHubData.data;
       res.send(package);
 
     }).catch(err =>{
       console.log('error encoutered while recieving finhub profile ', err.message);
+      package = new Object();
+      package[reqType] = new Object();
+      res.send(package)
     });
 }
 app.use(cors());
