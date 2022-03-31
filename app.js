@@ -97,7 +97,7 @@ app.get('/news/:id', (req, res) => {
   console.log(twoWeeks);
   const now = new Date(Date.now()).toISOString().split('T')[0];
   const newsUrl = `https://finnhub.io/api/v1/company-news?symbol=${req.params.id}&from=${twoWeeks}&to=${now}&token=${apiToken}`;
-  send(res, newsUrl, 'news', true);
+  send(res, newsUrl, 'news');
 });
 
 app.get('/charts/:id', (req, res) =>{
@@ -112,6 +112,16 @@ app.get('/mentions/:id', (req, res) =>{
   const mentionsUrl = `https://finnhub.io/api/v1/stock/social-sentiment?symbol=${req.params.id}&from=2022-01-01&token=${apiToken}`;
   send(res, mentionsUrl, 'mentions');
 });
+
+app.get('/recommendations/:id', (req, res)=>{
+  const recsUrl = `https://finnhub.io/api/v1/stock/recommendation?symbol=${req.params.id}&token=${apiToken}`;
+  send(res, recsUrl, 'recommendations');
+});
+
+app.get('/earnings/:id', (req, res) => {
+  const earningsUrl = `https://finnhub.io/api/v1/stock/earnings?symbol=${id}&token=${apiToken}`;
+  send(res, earningsUrl, 'earnings');
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
