@@ -119,9 +119,23 @@ app.get('/recommendations/:id', (req, res)=>{
 });
 
 app.get('/earnings/:id', (req, res) => {
-  const earningsUrl = `https://finnhub.io/api/v1/stock/earnings?symbol=${id}&token=${apiToken}`;
+  const earningsUrl = `https://finnhub.io/api/v1/stock/earnings?symbol=${req.params.id}&token=${apiToken}`;
   send(res, earningsUrl, 'earnings');
-})
+});
+
+app.get('/trend/:id', (req, res) =>{
+  const now = Math.floor(Date.now() / 1000);
+  var temp = new Date();
+  temp.setHours( temp.getHours() - 6);
+  const before = Math.floor(temp.getTime() / 1000);
+  const candlesUrl = `https://finnhub.io/api/v1/stock/candle?symbol=${req.params.id}&resolution=5&from=${before}&to=${now}&token=${apiToken}`
+  send(res, candlesUrl, 'trend');
+});
+
+app.get('/peers/:id', (req, res) => {
+  const url = `https://finnhub.io/api/v1/stock/peers?symbol=${req.params.id}&token=${apiToken}`
+  send(res, url, 'peers');
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
